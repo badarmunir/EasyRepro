@@ -404,6 +404,11 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
             return WaitForPageToLoad(driver, Constants.DefaultTimeout.Seconds);
         }
 
+        public static JObject WaitForTestResults(this IWebDriver driver)
+        {
+            return WaitForTestResults(driver, Constants.DefaultTimeout.Seconds);
+        }
+
         public static bool WaitForTransaction(this IWebDriver driver)
         {
             return WaitForTransaction(driver, Constants.DefaultTimeout.Seconds);
@@ -497,6 +502,59 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
 
             return state;
         }
+
+        public static JObject WaitForTestResults(this IWebDriver driver, int maxWaitTimeInSeconds)
+        {
+            // Switch to app frame
+            driver.SwitchTo().Frame("fullscreen-app-host");
+
+            // Define for current state of TestExecution
+            int testExecutionState = 0;
+            bool state = false;
+            JObject jsonResultString = new JObject();
+
+            try
+            {
+                //Poll every half second to see if UCI is idle
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1800));
+                wait.Until(d =>
+                {
+                    try
+                    {
+                        // Check to see if ExecutionState is Complete(2) or Error(3)
+
+                        jsonResultString = driver.GetJsonObject("AppMagic.TestStudio.GetTestExecutionInfo()");
+                        testExecutionState = (int)jsonResultString.GetValue("ExecutionState");
+
+                        if (testExecutionState == 0 || testExecutionState == 1)
+                        {
+                            state = false;
+                        }
+                        else
+                        {
+                            state = true;
+                        }
+                    }
+                    catch (TimeoutException)
+                    {
+
+                    }
+                    catch (NullReferenceException)
+                    {
+
+                    }
+
+                    return state;
+                });
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return jsonResultString;
+        }
+
         public static bool WaitForTransaction(this IWebDriver driver, int maxWaitTimeInSeconds)
         {
             bool state = false;

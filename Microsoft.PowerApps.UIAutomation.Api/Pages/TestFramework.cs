@@ -4,6 +4,7 @@
 using Microsoft.Dynamics365.UIAutomation.Browser;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
         {
         }
 
-        public BrowserCommandResult<bool> ExecuteTestFramework(Uri uri)
+        public BrowserCommandResult<JObject> ExecuteTestFramework(Uri uri)
         {
             return this.Execute(GetOptions("Execute Test Framework"), driver =>
             {
@@ -37,12 +38,9 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 CheckForPermissionDialog(driver);
 
                 // Wait for test completion and collect results
-                JObject testResults = CollectResultsOnCompletion(driver);
+                JObject testResults = WaitForTestResults(driver);
 
-                // Report Results to DevOps Pipeline
-                ReportResultsToDevOps(testResults);
-
-                return true;
+                return testResults;
             });
         }
 
@@ -59,6 +57,9 @@ namespace Microsoft.PowerApps.UIAutomation.Api
 
         internal void CheckForPermissionDialog(IWebDriver driver)
         {
+            // Switch to default content
+            driver.SwitchTo().DefaultContent();
+
             var dialogButtons = driver.WaitUntilAvailable(By.XPath(Elements.Xpath[Reference.TestFramework.PermissionDialogButtons]), new TimeSpan(0, 0, 5));
 
             if (dialogButtons != null)
@@ -70,27 +71,40 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 {
                     if (b.Text.Equals("Allow"))
                     {
+                        b.Hover(driver, true);
                         b.Click(true);
+                        b.SendKeys(Keys.Enter);
                         driver.WaitForPageToLoad();
                     }
                 }
             }
         }
 
-        internal JObject CollectResultsOnCompletion(IWebDriver driver)
+        internal JObject WaitForTestResults(IWebDriver driver)
         {
+            JObject jsonResultString = new JObject();
+            jsonResultString = driver.WaitForTestResults();
+
+            return jsonResultString;
+
+            /*
+            // Switch to app frame
+            driver.SwitchTo().Frame("fullscreen-app-host");
+
             // Define for current state of TestExecution
             int testExecutionState = 0;
-            JObject jsonResultString = new JObject();
+
 
             do
             {
+                driver.WaitForTransaction();
                 jsonResultString = driver.GetJsonObject("AppMagic.TestStudio.GetTestExecutionInfo()");
                 testExecutionState = (int)jsonResultString.GetValue("ExecutionState");
             }
             while (testExecutionState == 0 || testExecutionState == 1);
 
             return jsonResultString;
+            */
         }
 
         internal void InitiateTest(IWebDriver driver, Uri uri)
@@ -99,14 +113,15 @@ namespace Microsoft.PowerApps.UIAutomation.Api
 
             // Wait for page to load
             driver.WaitForPageToLoad();
-
-            // Switch to app frame
-            driver.SwitchTo().Frame("fullscreen-app-host");
         }
 
-        internal void ReportResultsToDevOps(JObject jObject)
+        public Tuple<int, int> ReportResultsToDevOps(JObject jObject)
         {
             var testExecutionMode = (int)jObject.GetValue("ExecutionMode");
+
+            int passCount = 0;
+            int failCount = 0;
+
 
             if (testExecutionMode == 0)
             {
@@ -114,10 +129,15 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             }
             else if (testExecutionMode == 1)
             {
-                // Put JSON result objects into a list
+                // Put JSON result objects into a TestSuiteResult
                 var testSuiteResults = jObject["TestSuiteResult"]?.ToObject<TestSuiteResult>();
-                long testSuiteElapsedTicks = (testSuiteResults.EndTime - testSuiteResults.StartTime);
-                TimeSpan testSuiteElapsedTime = new TimeSpan(testSuiteElapsedTicks);
+
+                passCount = testSuiteResults.TestsPassed;
+                failCount = testSuiteResults.TestsFailed;
+
+                // Calculate Total Execution Time
+                int testSuiteElapsedMs = (int)(testSuiteResults.EndTime - testSuiteResults.StartTime);
+                TimeSpan testSuiteElapsedTime = new TimeSpan(0,0,0,0, testSuiteElapsedMs);
             
                 // Output results to Console
                 Console.WriteLine($"TestSuite Name: {testSuiteResults.TestSuiteName} with ID {testSuiteResults.TestSuiteId}");
@@ -127,6 +147,9 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 Console.WriteLine($"TestSuite execution time: {testSuiteElapsedTime}");
 
             }
+
+            var countPassFailResult = Tuple.Create(passCount, failCount);
+            return countPassFailResult;
         }
     }
 }

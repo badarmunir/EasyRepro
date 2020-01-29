@@ -4,6 +4,7 @@
 using Microsoft.Dynamics365.UIAutomation.Browser;
 using OpenQA.Selenium;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using System.Threading;
@@ -112,12 +113,11 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 driver.WaitUntilVisible(By.XPath(Elements.Xpath[Reference.Login.UserId]));
 
                 var userIdFieldVisible = driver.IsVisible(By.XPath(Elements.Xpath[Reference.Login.UserId]));
-
-                Console.WriteLine($"Value of userIdFieldVisible: {userIdFieldVisible}");
+                Debug.WriteLine($"Value of userIdFieldVisible: {userIdFieldVisible}");
 
                 if (userIdFieldVisible)
                 {
-                    Console.WriteLine("UserID field is visible. Proceeding with login.");
+                    Debug.WriteLine("UserID field is visible. Proceeding with login.");
                     driver.FindElement(By.XPath(Elements.Xpath[Reference.Login.UserId])).SendKeys(username.ToUnsecureString());
                     driver.FindElement(By.XPath(Elements.Xpath[Reference.Login.UserId])).SendKeys(Keys.Tab);
                     driver.FindElement(By.XPath(Elements.Xpath[Reference.Login.UserId])).SendKeys(Keys.Enter);
@@ -155,7 +155,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                             {
                                 try
                                 {
-                                    e.WaitUntilClickable(By.ClassName("d365shell-c-groups-menu-toggle"), new TimeSpan(0, 0, 30));
+                                    e.WaitUntilVisible(By.ClassName("apps-list"), new TimeSpan(0, 0, 30));
                                 }
                                 catch (Exception exc)
                                 {

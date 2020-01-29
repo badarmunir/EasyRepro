@@ -1,7 +1,9 @@
 ﻿using Microsoft.Dynamics365.UIAutomation.Browser;
 using Microsoft.PowerApps.UIAutomation.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Diagnostics;
 
 namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
 {
@@ -51,7 +53,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                 try
                 {
                     //Login To PowerApps
-                    Console.WriteLine($"Attempting to execute Test Suite: {_xrmUri}");
+                    Debug.WriteLine($"Attempting to authenticate to Maker Portal: {_xrmUri}");
 
                     for (int retryCount = 0; retryCount < Reference.Login.SignInAttempts; retryCount++)
                     {
@@ -95,16 +97,40 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                         }
                     }
 
-                    Console.WriteLine("Power Apps Test Framework Test Suite Execution Starting...");
+                    Console.WriteLine("Power Apps Test Framework Execution Starting...");
 
-                    appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri);
+                    // Initialize TestFrameworok results JSON object
+                    JObject testFrameworkResults = new JObject();
+
+                    // Execute TestFramework and return JSON result object
+                    testFrameworkResults = appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri);
+
+                    // Report Results to DevOps Pipeline                    
+                    var testResultCount = appBrowser.TestFramework.ReportResultsToDevOps(testFrameworkResults);
+                    
+                    if (testResultCount.Item1 > 0 && testResultCount.Item2 > 0)
+                    {
+                        string message = ("\n" + "Inconclusive Test Suite Result: " + "\n" + $"Test Pass Count: {testResultCount.Item1}" + "\n" + $"Test Fail Count: {testResultCount.Item2}" + "\n" + "Please see the console log for more information.");
+                        Assert.Inconclusive(message);
+                    }
+                    else if (testResultCount.Item2 > 0)
+                    {
+                        string message = ("\n" + "Test Failed: " + "\n" + $"Test Fail Count: {testResultCount.Item2}" + "\n" + "Please see the console log for more information.");
+                        Assert.Fail(message);
+                    }
+                    else if (testResultCount.Item1 > 0)
+                    {
+                        var success = true;
+                        string message = ("\n" + "Success: " + "\n" + $"Test Pass Count: {testResultCount.Item1}");
+                        Assert.IsTrue(success, message);
+                    }
 
                     appBrowser.ThinkTime(5000);
 
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"An error occurred attempting to run the Power Apps Test Suite: {e}");
+                    Console.WriteLine($"An error occurred attempting to run the Power Apps Test Framework: {e}");
 
                     _resultsDirectory = TestContext.TestResultsDirectory;
                     Console.WriteLine($"Current results directory location: {_resultsDirectory}");
@@ -116,7 +142,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                     throw;
                 }
 
-                Console.WriteLine("Power Apps Test Framework Test Suite Execution Completed.");
+                Console.WriteLine("Power Apps Test Framework Execution Completed.");
             }
         }        
     }
