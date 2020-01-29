@@ -3,32 +3,25 @@
 using Microsoft.Dynamics365.UIAutomation.Browser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Configuration;
+using System.IO;
 
 namespace Microsoft.PowerApps.UIAutomation.Sample
 {
     public class TestSettings
     {
-
-        public TestContext TestContext { get; set; }
-
-        private static TestContext _testContext;
-
-        private static BrowserType Type;
-
-        [ClassInitialize]
-        public static void Initialize(TestContext TestContext)
-        {
-            _testContext = TestContext;
-            Type = (BrowserType)Enum.Parse(typeof(BrowserType), _testContext.Properties["BrowserType"].ToString());
-        }
+        private static readonly string Type = ConfigurationManager.AppSettings["BrowserType"];
+        private static readonly string DriversPath = ConfigurationManager.AppSettings["DriversPath"];
+        private static readonly bool? UsePrivateMode = Convert.ToBoolean(ConfigurationManager.AppSettings["UsePrivateMode"]);
 
         public static BrowserOptions Options = new BrowserOptions
         {
-            BrowserType = BrowserType.Chrome,
-            PrivateMode = true,
+            BrowserType = (BrowserType)Enum.Parse(typeof(BrowserType), Type),
+            PrivateMode = UsePrivateMode ?? true,
             FireEvents = false,
             Headless = false,
-            UserAgent = false
+            UserAgent = false,
+            DriversPath = Path.IsPathRooted(DriversPath) ? DriversPath : Path.Combine(Directory.GetCurrentDirectory(), DriversPath)
         };
     }
 }

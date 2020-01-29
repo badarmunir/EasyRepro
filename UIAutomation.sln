@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.Dynamics365.UIAut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.PowerApps.UIAutomation.Api", "Microsoft.PowerApps.UIAutomation.Api\Microsoft.PowerApps.UIAutomation.Api.csproj", "{CB621ADC-A2F3-4AD6-8E65-B29DC3034D54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.PowerApps.UIAutomation.Sample", "Microsoft.PowerApps.UIAutomation.Sample\Microsoft.PowerApps.UIAutomation.Sample.csproj", "{9105FB92-7952-4F1B-9F6F-6769B4B5ED21}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Microsoft.PowerApps.UIAutomation.Tests", "Microsoft.PowerApps.UIAutomation.Sample\Microsoft.PowerApps.UIAutomation.Tests.csproj", "{9105FB92-7952-4F1B-9F6F-6769B4B5ED21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

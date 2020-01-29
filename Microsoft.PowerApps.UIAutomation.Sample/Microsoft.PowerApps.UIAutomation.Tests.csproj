@@ -60,17 +60,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModelDriven\VerifySolutionChecker.cs" />
-    <Compile Include="ModelDriven\RunSolutionChecker.cs" />
-    <Compile Include="ModelDriven\OpenSolutionCheckerUI.cs" />
-    <Compile Include="Player\ExpandCollapse.cs" />
-    <Compile Include="Studio\MakeBlankApp.cs" />
-    <Compile Include="Player\OpenApp.cs" />
-    <Compile Include="Studio\SaveApp.cs" />
-    <Compile Include="Player\Sidebar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestFramework\RunTestSuite.cs" />
+    <Compile Include="TestFramework\RunTestFramework-AppConfig.cs" />
+    <Compile Include="TestFramework\RunTestFramework-RunSettings.cs" />
     <Compile Include="TestSettings.cs" />
+    <Compile Include="RunTestSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Microsoft.Dynamics365.UIAutomation.Browser\Microsoft.Dynamics365.UIAutomation.Browser.csproj">
@@ -90,7 +84,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="solutionchecker.runsettings">
+    <None Include="patestframework.runsettings">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -100,10 +94,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Selenium.WebDriver.GeckoDriver.Win64.0.23.0\build\Selenium.WebDriver.GeckoDriver.Win64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.GeckoDriver.Win64.0.23.0\build\Selenium.WebDriver.GeckoDriver.Win64.targets'))" />
-    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.77.0.3865.4000\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.77.0.3865.4000\build\Selenium.WebDriver.ChromeDriver.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.WebDriver.ChromeDriver.79.0.3945.3600\build\Selenium.WebDriver.ChromeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.WebDriver.ChromeDriver.79.0.3945.3600\build\Selenium.WebDriver.ChromeDriver.targets'))" />
   </Target>
   <Import Project="..\packages\Selenium.WebDriver.GeckoDriver.Win64.0.23.0\build\Selenium.WebDriver.GeckoDriver.Win64.targets" Condition="Exists('..\packages\Selenium.WebDriver.GeckoDriver.Win64.0.23.0\build\Selenium.WebDriver.GeckoDriver.Win64.targets')" />
-  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.77.0.3865.4000\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.77.0.3865.4000\build\Selenium.WebDriver.ChromeDriver.targets')" />
+  <Import Project="..\packages\Selenium.WebDriver.ChromeDriver.79.0.3945.3600\build\Selenium.WebDriver.ChromeDriver.targets" Condition="Exists('..\packages\Selenium.WebDriver.ChromeDriver.79.0.3945.3600\build\Selenium.WebDriver.ChromeDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

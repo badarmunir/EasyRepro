@@ -2,27 +2,20 @@
 using Microsoft.PowerApps.UIAutomation.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Configuration;
-using System.Security;
-using System.Threading;
 
 namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
 {
     [TestClass]
-    public class RunTestFramework
+    public class RunTestFrameworkWithRunSettings
     {
         private static string _username = "";
         private static string _password = "";
         private static BrowserType _browserType;
         private static Uri _xrmUri;
-        private static string _solutionName = "";
-        private static string _environmentName = "";
-        private static string _sideBarButton = "";
-        private static string _commandBarButton = "";
-        private static string _subButtonRun = "";
-        private static string _subButtonView = "";
-        private static string _subButtonDownload = "";
+        private static Uri _testFrameworkUri;
         private static string _resultsDirectory = "";
+        private static string _driversPath = "";
+        private static string _usePrivateMode;
 
 
         public TestContext TestContext { get; set; }
@@ -37,8 +30,11 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
             _username = _testContext.Properties["OnlineUsername"].ToString();
             _password = _testContext.Properties["OnlinePassword"].ToString();
             _xrmUri = new Uri(_testContext.Properties["OnlineUrl"].ToString());
+            _testFrameworkUri = new Uri(_testContext.Properties["TestFrameworkUrl"].ToString());
             _resultsDirectory = _testContext.Properties["ResultsDirectory"].ToString();
             _browserType = (BrowserType)Enum.Parse(typeof(BrowserType), _testContext.Properties["BrowserType"].ToString());
+            _driversPath = _testContext.Properties["DriversPath"].ToString();
+            _usePrivateMode = _testContext.Properties["UsePrivateMode"].ToString();
 
         }
 
@@ -99,12 +95,11 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                         }
                     }
 
-                    Console.WriteLine("Power Apps Test Framework Test Suite Execution Complete");
+                    Console.WriteLine("Power Apps Test Framework Test Suite Execution Starting...");
 
-                    Uri testSuiteUri = new Uri("https://apps.test.powerapps.com/play/fd081f40-659b-4eb3-a97c-9797dc5a54c1?tenantId=e7a4cc03-dda9-403d-b33b-e01cb57f0420&__PATestSuiteId=TestSuite_952993D4D8F44D4688CD561DAAB72ADB3");
-                    appBrowser.TestFramework.ExecuteTestSuite(testSuiteUri);
+                    appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri);
 
-                    appBrowser.ThinkTime(10000);
+                    appBrowser.ThinkTime(5000);
 
                 }
                 catch (Exception e)

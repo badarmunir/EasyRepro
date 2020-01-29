@@ -37,6 +37,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
 
             //TestFramework
             { "TestFramework_ToastMessage", "//*[@class=\"toast-message\"]" },
+            { "TestFramework_PermissionDialogButtons", "//*[@class=\"button-strip\"]" },
 
             //Backstage
             { "Backstage_MenuContainer","//div[contains(@class, 'backstage-nav')]" },
@@ -163,6 +164,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
         public static class TestFramework
         {
             public static string ToastMessage = "TestFramework_ToastMessage";
+            public static string PermissionDialogButtons = "TestFramework_PermissionDialogButtons";
         }
 
         public static class BackStage
