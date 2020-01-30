@@ -519,7 +519,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
             try
             {
                 //Poll every half second to see if UCI is idle
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1800));
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(300));
                 wait.Until(d =>
                 {
                     try
