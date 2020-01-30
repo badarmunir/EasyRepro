@@ -110,7 +110,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                     
                     if (testResultCount.Item1 > 0 && testResultCount.Item2 > 0)
                     {
-                        string message = ("\n" + "Inconclusive Test Suite Result: " + "\n" + $"Test Pass Count: {testResultCount.Item1}" + "\n" + $"Test Fail Count: {testResultCount.Item2}" + "\n" + "Please see the console log for more information.");
+                        string message = ("\n" + "Inconclusive Test Result: " + "\n" + $"Test Pass Count: {testResultCount.Item1}" + "\n" + $"Test Fail Count: {testResultCount.Item2}" + "\n" + "Please see the console log for more information.");
                         Assert.Inconclusive(message);
                     }
                     else if (testResultCount.Item2 > 0)

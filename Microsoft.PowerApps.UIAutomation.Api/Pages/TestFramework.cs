@@ -55,6 +55,21 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             public int TestsFailed { get; set; }
         }
 
+        public class TestCaseResult
+        {
+            public string TestSuiteId { get; set; }
+            public string TestSuiteName { get; set; }
+            public string TestSuiteDescription { get; set; }
+            public string TestCaseId { get; set; }
+            public string TestCaseName { get; set; }
+            public string TestCaseDescription { get; set; }
+            public long StartTime { get; set; }
+            public long EndTime { get; set; }
+            public bool Success { get; set; }
+            public ArraySegment<string> Traces { get; set; }
+
+        }
+
         internal void CheckForPermissionDialog(IWebDriver driver)
         {
             // Switch to default content
@@ -126,6 +141,33 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             if (testExecutionMode == 0)
             {
                 // TestCase
+                var testCaseResults = jObject["TestCaseResult"]?.ToObject<TestCaseResult>();
+
+                if (testCaseResults.Success)
+                {
+                    passCount = 1;
+                    failCount = 0;
+                }
+                else
+                {
+                    passCount = 0;
+                    failCount = 1;
+                    
+                }
+
+                // Calculate Total Execution Time
+                int testCaseElapsedMs = (int)(testCaseResults.EndTime - testCaseResults.StartTime);
+                TimeSpan testCaseElapsedTime = new TimeSpan(0, 0, 0, 0, testCaseElapsedMs);
+
+                // Output results to Console
+                Console.WriteLine($"TestSuite Name: {testCaseResults.TestSuiteName} with ID {testCaseResults.TestSuiteId}");
+                Console.WriteLine($"TestSuite Description: {testCaseResults.TestSuiteDescription}");
+                Console.WriteLine($"TestCase Name: {testCaseResults.TestCaseName} with ID {testCaseResults.TestCaseId}");
+                Console.WriteLine($"TestCase Description: {testCaseResults.TestCaseDescription}");
+                //Console.WriteLine($"Test Case Result: {testCaseResults.TestsPassed}");
+                //Console.WriteLine($"Tests Failed: {testCaseResults.TestsPassed}");
+                Console.WriteLine($"Test Case execution time: {testCaseElapsedTime}");
+
             }
             else if (testExecutionMode == 1)
             {
