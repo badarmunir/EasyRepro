@@ -555,6 +555,8 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
 
             }
 
+            Debug.WriteLineIf(jsonResultString == null, "jsonResultString is null.");
+
             return jsonResultString;
         }
 
