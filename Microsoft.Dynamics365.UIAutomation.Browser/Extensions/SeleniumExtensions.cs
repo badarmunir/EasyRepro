@@ -533,14 +533,14 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
                         {
                             state = false;
                         }
-                        else
+                        else if (testExecutionState == 2 || testExecutionState == 3)
                         {
                             state = true;
                         }
                     }
                     catch (TimeoutException)
                     {
-
+                        throw new TimeoutException($"A timeout occurred while attempting to retreive the ExecutionState of the current test. Current Execution State is: {testExecutionState}");
                     }
                     catch (NullReferenceException)
                     {
