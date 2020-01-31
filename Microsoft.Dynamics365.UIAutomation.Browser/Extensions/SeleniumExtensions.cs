@@ -538,7 +538,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
                     catch (TimeoutException)
                     {
                         Debug.WriteLine($"jsonResultString is {jsonResultString}.");
-                        throw new TimeoutException($"A timeout occurred while attempting to retreive the ExecutionState of the current test. Current Execution State is: {testExecutionState}");
+                        throw new Exception($"A timeout occurred while attempting to retreive the ExecutionState of the current test. Current Execution State is: {testExecutionState}");
                     }
                     catch (NullReferenceException)
                     {
