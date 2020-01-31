@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Web.Script.Serialization;
+using SeleniumExtras.WaitHelpers;
 
 namespace Microsoft.Dynamics365.UIAutomation.Browser
 {
@@ -350,7 +351,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
 
             try
             {
-                wait.Until(ExpectedConditions.AlertIsPresent());
+                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.AlertIsPresent());
 
                 returnvalue = true;
             }
@@ -719,7 +720,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
 
             try
             {
-                wait.Until(ExpectedConditions.ElementIsVisible(by));
+                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementIsVisible(by));
 
                 success = true;
             }
@@ -764,7 +765,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
 
             try
             {                
-                wait.Until(ExpectedConditions.ElementToBeClickable(by));
+                wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(by));
 
                 success = true;
             }
