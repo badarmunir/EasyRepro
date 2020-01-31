@@ -525,19 +525,15 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
                     try
                     {
                         // Check to see if ExecutionState is Complete(2) or Error(3)
-
-                        jsonResultString = driver.GetJsonObject("AppMagic.TestStudio.GetTestExecutionInfo()");
-                        testExecutionState = (int)jsonResultString.GetValue("ExecutionState");
-
-                        if (testExecutionState == 0 || testExecutionState == 1)
+                        do
                         {
-                            state = false;
+                            jsonResultString = driver.GetJsonObject("AppMagic.TestStudio.GetTestExecutionInfo()");
+                            Debug.WriteLine($"JsonObject Value is: {jsonResultString}");
+                            testExecutionState = (int)jsonResultString.GetValue("ExecutionState");
                         }
-                        else if (testExecutionState == 2 || testExecutionState == 3)
-                        {
+                        while (testExecutionState == 0 || testExecutionState == 1);
 
-                            state = true;
-                        }
+                        state = true;
                     }
                     catch (TimeoutException)
                     {
