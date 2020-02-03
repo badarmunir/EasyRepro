@@ -105,6 +105,11 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                     // Execute TestFramework and return JSON result object
                     testFrameworkResults = appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri);
 
+                    _resultsDirectory = TestContext.TestResultsDirectory;
+                    string location = $@"{_resultsDirectory}\RunTestSuite-PostExecutionScreenshot.jpeg";
+                    appBrowser.TakeWindowScreenShot(location, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
+                    _testContext.AddResultFile(location);
+
                     // Report Results to DevOps Pipeline                    
                     var testResultCount = appBrowser.TestFramework.ReportResultsToDevOps(testFrameworkResults);
                     
