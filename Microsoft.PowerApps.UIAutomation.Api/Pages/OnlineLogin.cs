@@ -144,7 +144,9 @@ namespace Microsoft.PowerApps.UIAutomation.Api
 
                         Thread.Sleep(1000);
 
-                        if (driver.IsVisible(By.XPath(Elements.Xpath[Reference.Login.StaySignedIn])))
+                        var staySignedInVisible = driver.WaitUntilVisible(By.XPath(Elements.Xpath[Reference.Login.StaySignedIn]),new TimeSpan(0,0,5));
+
+                        if (staySignedInVisible)
                         {
                             driver.ClickWhenAvailable(By.XPath(Elements.Xpath[Reference.Login.StaySignedIn]));
                         }

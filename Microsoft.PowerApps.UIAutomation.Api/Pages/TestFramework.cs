@@ -8,6 +8,7 @@ using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Microsoft.PowerApps.UIAutomation.Api
 {
@@ -32,7 +33,10 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             return this.Execute(GetOptions("Execute Test Framework"), driver =>
             {
                 // Navigate to TestSuite or TestCase URL
-                InitiateTest(driver, uri);
+                var sessionId = InitiateTest(driver, uri);
+
+                Debug.WriteLineIf(sessionId != null, $"Session ID is: {sessionId}");
+                Debug.WriteLineIf(sessionId == null, "Session ID is NULL");
 
                 // Check for existence of permissions dialog (1st test load for user)
                 CheckForPermissionDialog(driver);
@@ -122,12 +126,19 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             */
         }
 
-        internal void InitiateTest(IWebDriver driver, Uri uri)
+        internal string InitiateTest(IWebDriver driver, Uri uri)
         {
             driver.Navigate().GoToUrl(uri);
 
             // Wait for page to load
             driver.WaitForPageToLoad();
+
+            // Wait for fullscreen-app-host
+            driver.WaitUntilVisible(By.Id("fullscreen-app-host"));
+
+            string sessionId = (string)driver.ExecuteScript("return Core.Telemetry.Log.sessionId");
+
+            return sessionId;
         }
 
         public Tuple<int, int> ReportResultsToDevOps(JObject jObject)
