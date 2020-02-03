@@ -507,7 +507,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
         public static JObject WaitForTestResults(this IWebDriver driver, int maxWaitTimeInSeconds)
         {
             // Wait for app frame
-            driver.WaitUntilAvailable(By.Id("fullscreen-app-host"), TimeSpan.FromSeconds(1));
+            driver.WaitUntilVisible(By.Id("fullscreen-app-host"), TimeSpan.FromSeconds(5));
 
             // Switch to app frame
             driver.SwitchTo().Frame("fullscreen-app-host");
