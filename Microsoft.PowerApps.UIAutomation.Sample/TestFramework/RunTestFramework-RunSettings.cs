@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
 {
@@ -18,6 +19,10 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
         private static string _resultsDirectory = "";
         private static string _driversPath = "";
         private static string _usePrivateMode;
+        private static string _testFrameworkURLFilePath = "";
+        private static int _globalTestCount = 0;
+        private static int _globalPassCount = 0;
+        private static int _globalFailCount = 0;
 
 
         public TestContext TestContext { get; set; }
@@ -32,11 +37,11 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
             _username = _testContext.Properties["OnlineUsername"].ToString();
             _password = _testContext.Properties["OnlinePassword"].ToString();
             _xrmUri = new Uri(_testContext.Properties["OnlineUrl"].ToString());
-            _testFrameworkUri = new Uri(_testContext.Properties["TestFrameworkUrl"].ToString());
             _resultsDirectory = _testContext.Properties["ResultsDirectory"].ToString();
             _browserType = (BrowserType)Enum.Parse(typeof(BrowserType), _testContext.Properties["BrowserType"].ToString());
             _driversPath = _testContext.Properties["DriversPath"].ToString();
             _usePrivateMode = _testContext.Properties["UsePrivateMode"].ToString();
+            _testFrameworkURLFilePath = _testContext.Properties["TestFrameworkURLFilePath"].ToString();
 
         }
 
@@ -50,104 +55,139 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
 
             using (var appBrowser = new PowerAppBrowser(options))
             {
-                try
+                // Track current test iteration
+                int testRunCounter = 0;
+                // Track list of Test Framework URLs
+                var testUrlList = appBrowser.TestFramework.GetTestURLs(_testFrameworkURLFilePath);
+                // Track total number of TestURLs
+                int testUrlCount = testUrlList.Value.Count();
+
+                foreach (Uri testUrl in testUrlList?.Value)
                 {
-                    //Login To PowerApps
-                    Debug.WriteLine($"Attempting to authenticate to Maker Portal: {_xrmUri}");
+                    // Test URL
+                    _testFrameworkUri = testUrl;
+                    testRunCounter += 1;
 
-                    for (int retryCount = 0; retryCount < Reference.Login.SignInAttempts; retryCount++)
+                    try
                     {
-                        try
+                        // if TestCounter > 1, authentication not required
+                        if (testRunCounter <= 1)
                         {
-                            appBrowser.OnlineLogin.Login(_xrmUri, _username.ToSecureString(), _password.ToSecureString());
-                            break;
-                        }
-                        catch (Exception exc)
-                        {
-                            Console.WriteLine($"Exception on Attempt #{retryCount + 1}: {exc}");
+                            //Login To PowerApps
+                            Debug.WriteLine($"Attempting to authenticate to Maker Portal: {_xrmUri}");
 
-                            if (retryCount+1 == Reference.Login.SignInAttempts)
+                            for (int retryCount = 0; retryCount < Reference.Login.SignInAttempts; retryCount++)
                             {
-                                // Login exception occurred, take screenshot
-                                _resultsDirectory = TestContext.TestResultsDirectory;
-                                string location = $@"{_resultsDirectory}\RunTestSuite-LoginErrorAttempt{retryCount + 1}.jpeg";
+                                try
+                                {
+                                    appBrowser.OnlineLogin.Login(_xrmUri, _username.ToSecureString(), _password.ToSecureString());
+                                    break;
+                                }
+                                catch (Exception exc)
+                                {
+                                    Console.WriteLine($"Exception on Attempt #{retryCount + 1}: {exc}");
 
-                                appBrowser.TakeWindowScreenShot(location, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
-                                _testContext.AddResultFile(location);
+                                    if (retryCount + 1 == Reference.Login.SignInAttempts)
+                                    {
+                                        // Login exception occurred, take screenshot
+                                        _resultsDirectory = TestContext.TestResultsDirectory;
+                                        string location = $@"{_resultsDirectory}\RunTestSuite-LoginErrorAttempt{retryCount + 1}.jpeg";
 
-                                // Max Sign-In Attempts reached
-                                Console.WriteLine($"Login failed after {retryCount + 1} attempts.");
-                                throw new InvalidOperationException($"Login failed after {retryCount + 1} attempts. Exception Details: {exc}");
-                            }
-                            else
-                            {
-                                // Login exception occurred, take screenshot
-                                _resultsDirectory = TestContext.TestResultsDirectory;
-                                string location = $@"{_resultsDirectory}\RunTestSuite-LoginErrorAttempt{retryCount+1}.jpeg";
+                                        appBrowser.TakeWindowScreenShot(location, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
+                                        _testContext.AddResultFile(location);
 
-                                appBrowser.TakeWindowScreenShot(location, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
-                                _testContext.AddResultFile(location);
+                                        // Max Sign-In Attempts reached
+                                        Console.WriteLine($"Login failed after {retryCount + 1} attempts.");
+                                        throw new InvalidOperationException($"Login failed after {retryCount + 1} attempts. Exception Details: {exc}");
+                                    }
+                                    else
+                                    {
+                                        // Login exception occurred, take screenshot
+                                        _resultsDirectory = TestContext.TestResultsDirectory;
+                                        string location = $@"{_resultsDirectory}\RunTestSuite-LoginErrorAttempt{retryCount + 1}.jpeg";
 
-                                //Navigate away and retry
-                                appBrowser.Navigate("about:blank");
+                                        appBrowser.TakeWindowScreenShot(location, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
+                                        _testContext.AddResultFile(location);
 
-                                Console.WriteLine($"Login failed after attempt #{retryCount + 1}.");
-                                continue;
+                                        //Navigate away and retry
+                                        appBrowser.Navigate("about:blank");
+
+                                        Console.WriteLine($"Login failed after attempt #{retryCount + 1}.");
+                                        continue;
+                                    }
+                                }
                             }
                         }
+
+                        Console.WriteLine($"Power Apps Test Framework Execution Starting Test #{testRunCounter} of {testUrlCount}");
+
+                        // Initialize TestFrameworok results JSON object
+                        JObject testFrameworkResults = new JObject();
+
+                        // Execute TestFramework and return JSON result object
+                        testFrameworkResults = appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri, testRunCounter);
+
+                        #if (DEBUG)    
+                        // Only output post execution screenshot in debug mode
+                        _resultsDirectory = TestContext.TestResultsDirectory;
+                        string location1 = $@"{_resultsDirectory}\TestRun{testRunCounter}-PostExecutionScreenshot.jpeg";
+                        appBrowser.TakeWindowScreenShot(location1, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
+                        _testContext.AddResultFile(location1);
+                        #endif
+
+                        // Report Results to DevOps Pipeline                    
+                        var testResultCount = appBrowser.TestFramework.ReportResultsToDevOps(testFrameworkResults, testRunCounter);
+
+                        _globalPassCount += testResultCount.Item1;
+                        _globalFailCount += testResultCount.Item2;
+                        _globalTestCount += (testResultCount.Item1 + testResultCount.Item2);
+
                     }
-
-                    Console.WriteLine("Power Apps Test Framework Execution Starting...");
-
-                    // Initialize TestFrameworok results JSON object
-                    JObject testFrameworkResults = new JObject();
-
-                    // Execute TestFramework and return JSON result object
-                    testFrameworkResults = appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri);
-
-                    _resultsDirectory = TestContext.TestResultsDirectory;
-                    string location1 = $@"{_resultsDirectory}\RunTestSuite-PostExecutionScreenshot.jpeg";
-                    appBrowser.TakeWindowScreenShot(location1, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
-                    _testContext.AddResultFile(location1);
-
-                    // Report Results to DevOps Pipeline                    
-                    var testResultCount = appBrowser.TestFramework.ReportResultsToDevOps(testFrameworkResults);
-                    
-                    if (testResultCount.Item1 > 0 && testResultCount.Item2 > 0)
+                    catch (Exception e)
                     {
-                        string message = ("\n" + "Inconclusive Test Result: " + "\n" + $"Test Pass Count: {testResultCount.Item1}" + "\n" + $"Test Fail Count: {testResultCount.Item2}" + "\n" + "Please see the console log for more information.");
-                        Assert.Inconclusive(message);
-                    }
-                    else if (testResultCount.Item2 > 0)
-                    {
-                        string message = ("\n" + "Test Failed: " + "\n" + $"Test Fail Count: {testResultCount.Item2}" + "\n" + "Please see the console log for more information.");
-                        Assert.Fail(message);
-                    }
-                    else if (testResultCount.Item1 > 0)
-                    {
-                        var success = true;
-                        string message = ("\n" + "Success: " + "\n" + $"Test Pass Count: {testResultCount.Item1}");
-                        Assert.IsTrue(success, message);
+                        Console.WriteLine($"An error occurred during Test Run #{testRunCounter} of {testUrlCount}: {e}");
+
+                        _resultsDirectory = TestContext.TestResultsDirectory;
+                        Console.WriteLine($"Current results directory location: {_resultsDirectory}");
+                        string location = $@"{_resultsDirectory}\TestRun{testRunCounter}-GenericError.jpeg";
+
+                        appBrowser.TakeWindowScreenShot(location, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
+                        _testContext.AddResultFile(location);
+
+                        throw;
                     }
 
-                    appBrowser.ThinkTime(5000);
-
+                    Console.WriteLine($"Power Apps Test Framework Execution Completed for Test Run #{testRunCounter} of {testUrlCount}.");
                 }
-                catch (Exception e)
+
+                
+                if (_globalPassCount > 0 && _globalFailCount > 0)
                 {
-                    Console.WriteLine($"An error occurred attempting to run the Power Apps Test Framework: {e}");
-
-                    _resultsDirectory = TestContext.TestResultsDirectory;
-                    Console.WriteLine($"Current results directory location: {_resultsDirectory}");
-                    string location = $@"{_resultsDirectory}\RunTestSuite-GenericError.jpeg";
-
-                    appBrowser.TakeWindowScreenShot(location, OpenQA.Selenium.ScreenshotImageFormat.Jpeg);
-                    _testContext.AddResultFile(location);
-
-                    throw;
+                    string message = ("\n" 
+                        + "Inconclusive Test Result: " + "\n"
+                        + $"Total Test Count: {_globalTestCount}" + "\n"
+                        + $"Total Pass Count: {_globalPassCount}" + "\n" 
+                        + $"Total Fail Count: {_globalFailCount}" + "\n" 
+                        + "Please see the console log for more information.");
+                    Assert.Inconclusive(message);
                 }
-
-                Console.WriteLine("Power Apps Test Framework Execution Completed.");
+                else if (_globalFailCount > 0)
+                {
+                    string message = ("\n" 
+                        + "Test Failed: " + "\n" 
+                        + $"Total Fail Count: {_globalFailCount}" + "\n" 
+                        + "Please see the console log for more information.");
+                    Assert.Fail(message);
+                }
+                else if (_globalPassCount > 0)
+                {
+                    var success = true;
+                    string message = ("\n" 
+                        + "Success: " + "\n" 
+                        + $"Total Pass Count: {_globalPassCount}");
+                    Assert.IsTrue(success, message);
+                }
+                
             }
         }        
     }

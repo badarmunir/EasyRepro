@@ -64,7 +64,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
 
                     Console.WriteLine("Power Apps Test Framework Test Suite Execution Starting...");
 
-                    appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri);
+                    //appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri);
 
                     appBrowser.ThinkTime(5000);
 

@@ -2,13 +2,12 @@
 // Licensed under the MIT license.
 
 using Microsoft.Dynamics365.UIAutomation.Browser;
-using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
+using Newtonsoft.Json.Linq;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace Microsoft.PowerApps.UIAutomation.Api
 {
@@ -28,15 +27,15 @@ namespace Microsoft.PowerApps.UIAutomation.Api
         {
         }
 
-        public BrowserCommandResult<JObject> ExecuteTestFramework(Uri uri)
+        public BrowserCommandResult<JObject> ExecuteTestFramework(Uri uri, int testRunNumber)
         {
             return this.Execute(GetOptions("Execute Test Framework"), driver =>
             {
                 // Navigate to TestSuite or TestCase URL
                 var sessionId = InitiateTest(driver, uri);
 
-                Debug.WriteLineIf(sessionId != null, $"Session ID is: {sessionId}");
-                Debug.WriteLineIf(sessionId == null, "Session ID is NULL");
+                Debug.WriteLineIf(sessionId != null, $"Session ID for Test Run #{testRunNumber} is: {sessionId}");
+                Debug.WriteLineIf(sessionId == null, $"Session ID for Test Run #{testRunNumber} is NULL");
 
                 // Check for existence of permissions dialog (1st test load for user)
                 CheckForPermissionDialog(driver);
@@ -45,6 +44,23 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 JObject testResults = WaitForTestResults(driver);
 
                 return testResults;
+            });
+        }
+
+        public BrowserCommandResult<List<Uri>> GetTestURLs(string filePath)
+        {
+            return this.Execute(GetOptions("Get List of Test URLs"), driver =>
+            {
+                // Initialize list of URLs
+                List<Uri> testUrlList = new List<Uri>();
+
+                // Read contents of json file
+                JObject jObject = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(File.ReadAllText(filePath));
+
+                // Retrieve list of Test URLs
+                testUrlList = jObject["TestURLs"]?.ToObject<List<Uri>>();
+
+                return testUrlList;
             });
         }
 
@@ -141,7 +157,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             return sessionId;
         }
 
-        public Tuple<int, int> ReportResultsToDevOps(JObject jObject)
+        public Tuple<int, int> ReportResultsToDevOps(JObject jObject, int testRunNumber)
         {
             var testExecutionMode = (int)jObject.GetValue("ExecutionMode");
 
@@ -170,14 +186,22 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 int testCaseElapsedMs = (int)(testCaseResults.EndTime - testCaseResults.StartTime);
                 TimeSpan testCaseElapsedTime = new TimeSpan(0, 0, 0, 0, testCaseElapsedMs);
 
+                var testCaseResult = testCaseResults.Success ? "Pass" : "Fail";
+
                 // Output results to Console
-                Console.WriteLine($"TestSuite Name: {testCaseResults.TestSuiteName} with ID {testCaseResults.TestSuiteId}");
-                Console.WriteLine($"TestSuite Description: {testCaseResults.TestSuiteDescription}");
-                Console.WriteLine($"TestCase Name: {testCaseResults.TestCaseName} with ID {testCaseResults.TestCaseId}");
-                Console.WriteLine($"TestCase Description: {testCaseResults.TestCaseDescription}");
-                //Console.WriteLine($"Test Case Result: {testCaseResults.TestsPassed}");
+                Console.WriteLine("\t" + 
+                    $"TestSuite Name: {testCaseResults.TestSuiteName} with ID {testCaseResults.TestSuiteId}");
+                Console.WriteLine("\t" + 
+                    $"TestSuite Description: {testCaseResults.TestSuiteDescription}");
+                Console.WriteLine("\t" + 
+                    $"TestCase Name: {testCaseResults.TestCaseName} with ID {testCaseResults.TestCaseId}");
+                Console.WriteLine("\t" + 
+                    $"TestCase Description: {testCaseResults.TestCaseDescription}");
+                Console.WriteLine("\t" + 
+                    $"Test Case Result: {testCaseResult}");
                 //Console.WriteLine($"Tests Failed: {testCaseResults.TestsPassed}");
-                Console.WriteLine($"Test Case execution time: {testCaseElapsedTime}");
+                Console.WriteLine("\t" + 
+                    $"Test Case execution time: {testCaseElapsedTime}");
 
             }
             else if (testExecutionMode == 1)
@@ -185,6 +209,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 // Put JSON result objects into a TestSuiteResult
                 var testSuiteResults = jObject["TestSuiteResult"]?.ToObject<TestSuiteResult>();
 
+                var testSuiteCount = testSuiteResults.TestsPassed + testSuiteResults.TestsFailed;
                 passCount = testSuiteResults.TestsPassed;
                 failCount = testSuiteResults.TestsFailed;
 
@@ -193,11 +218,18 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 TimeSpan testSuiteElapsedTime = new TimeSpan(0,0,0,0, testSuiteElapsedMs);
             
                 // Output results to Console
-                Console.WriteLine($"TestSuite Name: {testSuiteResults.TestSuiteName} with ID {testSuiteResults.TestSuiteId}");
-                Console.WriteLine($"TestSuite Description: {testSuiteResults.TestSuiteDescription}");
-                Console.WriteLine($"Tests Passed: {testSuiteResults.TestsPassed}");
-                Console.WriteLine($"Tests Failed: {testSuiteResults.TestsPassed}");
-                Console.WriteLine($"TestSuite execution time: {testSuiteElapsedTime}");
+                Console.WriteLine("\t"+ 
+                    $"TestSuite Name: {testSuiteResults.TestSuiteName} with ID {testSuiteResults.TestSuiteId}");
+                Console.WriteLine("\t" + 
+                    $"TestSuite Description: {testSuiteResults.TestSuiteDescription}");
+                Console.WriteLine("\t" + 
+                    $"Total Tests: {testSuiteCount}");
+                Console.WriteLine("\t" + 
+                    $"Tests Passed: {testSuiteResults.TestsPassed}");
+                Console.WriteLine("\t" + 
+                    $"Tests Failed: {testSuiteResults.TestsPassed}");
+                Console.WriteLine("\t" + 
+                    $"TestSuite execution time: {testSuiteElapsedTime}");
 
             }
 

@@ -530,7 +530,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
                         jsonResultString = driver.GetJsonObject("AppMagic.TestStudio.GetTestExecutionInfo()");
                         testExecutionState = (int)jsonResultString.GetValue("ExecutionState");
 
-                        Debug.WriteLine(jsonResultString);
+                        //Debug.WriteLine(jsonResultString);
 
                         if (testExecutionState == 0 || testExecutionState == 1)
                         {
