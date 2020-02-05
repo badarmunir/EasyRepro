@@ -169,7 +169,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                         + $"Total Pass Count: {_globalPassCount}" + "\n" 
                         + $"Total Fail Count: {_globalFailCount}" + "\n" 
                         + "Please see the console log for more information.");
-                    Assert.Inconclusive(message);
+                    Assert.Fail(message);
                 }
                 else if (_globalFailCount > 0)
                 {
