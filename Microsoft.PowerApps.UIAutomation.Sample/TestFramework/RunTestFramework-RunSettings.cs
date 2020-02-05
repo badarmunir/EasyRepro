@@ -23,6 +23,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
         private static int _globalTestCount = 0;
         private static int _globalPassCount = 0;
         private static int _globalFailCount = 0;
+        private static int _testMaxWaitTimeInSeconds = 600;
 
 
         public TestContext TestContext { get; set; }
@@ -42,6 +43,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
             _driversPath = _testContext.Properties["DriversPath"].ToString();
             _usePrivateMode = _testContext.Properties["UsePrivateMode"].ToString();
             _testFrameworkURLFilePath = _testContext.Properties["TestFrameworkURLFilePath"].ToString();
+            _testMaxWaitTimeInSeconds = Convert.ToInt16(_testContext.Properties["TestMaxWaitTimeInSeconds"]);
 
         }
 
@@ -125,7 +127,7 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
                         JObject testFrameworkResults = new JObject();
 
                         // Execute TestFramework and return JSON result object
-                        testFrameworkResults = appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri, testRunCounter);
+                        testFrameworkResults = appBrowser.TestFramework.ExecuteTestFramework(_testFrameworkUri, testRunCounter, _testMaxWaitTimeInSeconds);
 
                         #if (DEBUG)    
                         // Only output post execution screenshot in debug mode

@@ -44,11 +44,12 @@
     <Parameter name="OnlinePassword" value="" />
     <Parameter name="OnlineUrl" value=""  />
     <!-- IE,Chrome,Firefox,Edge-->
-    <Parameter name="BrowserType" value="" />
+    <Parameter name="BrowserType" value="Chrome" />
     <Parameter name="DriversPath" value="" />
     <Parameter name="UsePrivateMode" value="true" />
     <Parameter name="ResultsDirectory" value="" />
     <Parameter name="TestFrameworkURLFilePath" value="" />
+    <Parameter name="TestMaxWaitTimeInSeconds" value="600" />
   </TestRunParameters>
   <!-- Adapter Specific sections -->
   

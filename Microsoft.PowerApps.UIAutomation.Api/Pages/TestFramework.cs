@@ -27,7 +27,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
         {
         }
 
-        public BrowserCommandResult<JObject> ExecuteTestFramework(Uri uri, int testRunNumber)
+        public BrowserCommandResult<JObject> ExecuteTestFramework(Uri uri, int testRunNumber, int maxWaitTimeInSeconds)
         {
             return this.Execute(GetOptions("Execute Test Framework"), driver =>
             {
@@ -41,7 +41,7 @@ namespace Microsoft.PowerApps.UIAutomation.Api
                 CheckForPermissionDialog(driver);
 
                 // Wait for test completion and collect results
-                JObject testResults = WaitForTestResults(driver);
+                JObject testResults = WaitForTestResults(driver, maxWaitTimeInSeconds);
 
                 return testResults;
             });
@@ -115,10 +115,10 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             }
         }
 
-        internal JObject WaitForTestResults(IWebDriver driver)
+        internal JObject WaitForTestResults(IWebDriver driver, int maxWaitTimeInSeconds)
         {
             JObject jsonResultString = new JObject();
-            jsonResultString = driver.WaitForTestResults();
+            jsonResultString = driver.WaitForTestResults(maxWaitTimeInSeconds);
 
             return jsonResultString;
 
