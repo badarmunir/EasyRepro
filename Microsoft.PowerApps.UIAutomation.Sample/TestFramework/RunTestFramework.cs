@@ -1,4 +1,7 @@
-﻿using Microsoft.PowerApps.TestFramework.Browser;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
+
+using Microsoft.PowerApps.TestFramework.Browser;
 using Microsoft.PowerApps.TestFramework.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
@@ -9,7 +12,7 @@ using System.Linq;
 namespace Microsoft.PowerApps.TestFramework.Tests
 {
     [TestClass]
-    public class RunTestFrameworkWithRunSettings
+    public class TestFramework
     {
         private static string _username = "";
         private static string _password = "";
@@ -48,7 +51,7 @@ namespace Microsoft.PowerApps.TestFramework.Tests
         [TestCategory("PowerAppsTestFramework")]
         [Priority(1)]
         [TestMethod]
-        public void RunTestSuite()
+        public void RunTestFramework()
         {
             BrowserOptions options = TestSettings.Options;
             options.BrowserType = _browserType;

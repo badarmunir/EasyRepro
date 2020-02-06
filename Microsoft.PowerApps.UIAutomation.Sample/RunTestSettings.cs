@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
+
 using Microsoft.PowerApps.TestFramework.Browser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -8,11 +9,8 @@ namespace Microsoft.PowerApps.TestFramework.Tests
 {
     public class RunTestSettings
     {
-
         public TestContext TestContext { get; set; }
-
         private static TestContext _testContext;
-
         private static BrowserType Type;
 
         [ClassInitialize]

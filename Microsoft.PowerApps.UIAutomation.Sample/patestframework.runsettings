@@ -42,6 +42,7 @@
   <TestRunParameters>
     <Parameter name="OnlineUsername" value="" />
     <Parameter name="OnlinePassword" value="" />
+    <!-- OnlineUrl (https://make.powerapps.com , https://make.preview.powerapps.com) -->
     <Parameter name="OnlineUrl" value=""  />
     <!-- IE,Chrome,Firefox,Edge-->
     <Parameter name="BrowserType" value="Chrome" />

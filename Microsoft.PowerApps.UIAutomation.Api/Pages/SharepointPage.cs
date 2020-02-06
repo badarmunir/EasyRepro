@@ -1,4 +1,7 @@
-﻿using Microsoft.PowerApps.TestFramework.Browser;
+﻿// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT license.
+
+using Microsoft.PowerApps.TestFramework.Browser;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
