@@ -1,12 +1,12 @@
-﻿using Microsoft.Dynamics365.UIAutomation.Browser;
-using Microsoft.PowerApps.UIAutomation.Api;
+﻿using Microsoft.PowerApps.TestFramework.Browser;
+using Microsoft.PowerApps.TestFramework.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
+namespace Microsoft.PowerApps.TestFramework.Tests
 {
     [TestClass]
     public class RunTestFrameworkWithRunSettings
@@ -24,7 +24,6 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
         private static int _globalPassCount = 0;
         private static int _globalFailCount = 0;
         private static int _testMaxWaitTimeInSeconds = 600;
-
 
         public TestContext TestContext { get; set; }
 
@@ -44,7 +43,6 @@ namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
             _usePrivateMode = _testContext.Properties["UsePrivateMode"].ToString();
             _testFrameworkURLFilePath = _testContext.Properties["TestFrameworkURLFilePath"].ToString();
             _testMaxWaitTimeInSeconds = Convert.ToInt16(_testContext.Properties["TestMaxWaitTimeInSeconds"]);
-
         }
 
         [TestCategory("PowerAppsTestFramework")]

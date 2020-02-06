@@ -7,8 +7,8 @@
     <ProjectGuid>{CB621ADC-A2F3-4AD6-8E65-B29DC3034D54}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.PowerApps.UIAutomation.Api</RootNamespace>
-    <AssemblyName>Microsoft.PowerApps.UIAutomation.Api</AssemblyName>
+    <RootNamespace>Microsoft.PowerApps.TestFramework.Api</RootNamespace>
+    <AssemblyName>Microsoft.PowerApps.TestFramework.Api</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -73,9 +73,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Microsoft.Dynamics365.UIAutomation.Browser\Microsoft.Dynamics365.UIAutomation.Browser.csproj">
+    <ProjectReference Include="..\Microsoft.Dynamics365.UIAutomation.Browser\Microsoft.PowerApps.TestFramework.Browser.csproj">
       <Project>{c9748803-f3cb-4531-b313-bc24d4d0bf0c}</Project>
-      <Name>Microsoft.Dynamics365.UIAutomation.Browser</Name>
+      <Name>Microsoft.PowerApps.TestFramework.Browser</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

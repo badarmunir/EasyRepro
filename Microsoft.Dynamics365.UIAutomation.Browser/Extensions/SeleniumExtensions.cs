@@ -507,7 +507,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
         public static JObject WaitForTestResults(this IWebDriver driver, int maxWaitTimeInSeconds)
         {
             // Wait for app frame
-            driver.WaitUntilVisible(By.Id("fullscreen-app-host"), TimeSpan.FromSeconds(5));
+            driver.WaitUntilVisible(By.Id("fullscreen-app-host"), TimeSpan.FromSeconds(10));
 
             // Switch to app frame
             driver.SwitchTo().Frame("fullscreen-app-host");
@@ -526,11 +526,8 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
                     try
                     {
                         // Check to see if ExecutionState is Complete(2) or Error(3)
-
                         jsonResultString = driver.GetJsonObject("AppMagic.TestStudio.GetTestExecutionInfo()");
                         testExecutionState = (int)jsonResultString.GetValue("ExecutionState");
-
-                        //Debug.WriteLine(jsonResultString);
 
                         if (testExecutionState == 0 || testExecutionState == 1)
                         {
@@ -541,13 +538,11 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
 
                             state = true;
                         }
-
-
                     }
                     catch (TimeoutException)
                     {
                         Debug.WriteLine($"jsonResultString is {jsonResultString}.");
-                        throw new Exception($"A timeout occurred while attempting to retreive the ExecutionState of the current test. Current Execution State is: {testExecutionState}");
+                        throw new Exception($"A timeout occurred while attempting to retrieve the ExecutionState of the current test. Current Execution State is: {testExecutionState}");
                     }
                     catch (NullReferenceException)
                     {
@@ -557,13 +552,16 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser
                     return state;
                 });
             }
+            catch (TimeoutException te)
+            {
+                throw new Exception($"A timeout occurred while attempting to retrieve the ExecutionState of the current test. {te}");
+            }
             catch (Exception)
             {
 
             }
 
             Debug.WriteLine($"jsonResultString is {jsonResultString}.");
-
             return jsonResultString;
         }
 

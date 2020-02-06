@@ -7,8 +7,8 @@
     <ProjectGuid>{C9748803-F3CB-4531-B313-BC24D4D0BF0C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Dynamics365.UIAutomation.Browser</RootNamespace>
-    <AssemblyName>Microsoft.Dynamics365.UIAutomation.Browser</AssemblyName>
+    <RootNamespace>Microsoft.PowerApps.TestFramework.Browser</RootNamespace>
+    <AssemblyName>Microsoft.PowerApps.TestFramework.Browser</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

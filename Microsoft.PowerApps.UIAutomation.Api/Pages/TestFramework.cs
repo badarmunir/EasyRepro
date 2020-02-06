@@ -121,25 +121,6 @@ namespace Microsoft.PowerApps.UIAutomation.Api
             jsonResultString = driver.WaitForTestResults(maxWaitTimeInSeconds);
 
             return jsonResultString;
-
-            /*
-            // Switch to app frame
-            driver.SwitchTo().Frame("fullscreen-app-host");
-
-            // Define for current state of TestExecution
-            int testExecutionState = 0;
-
-
-            do
-            {
-                driver.WaitForTransaction();
-                jsonResultString = driver.GetJsonObject("AppMagic.TestStudio.GetTestExecutionInfo()");
-                testExecutionState = (int)jsonResultString.GetValue("ExecutionState");
-            }
-            while (testExecutionState == 0 || testExecutionState == 1);
-
-            return jsonResultString;
-            */
         }
 
         internal string InitiateTest(IWebDriver driver, Uri uri)
