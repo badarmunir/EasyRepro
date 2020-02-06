@@ -4,6 +4,8 @@
 using Microsoft.PowerApps.TestFramework.Browser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Configuration;
+using System.IO;
 
 namespace Microsoft.PowerApps.TestFramework.Tests
 {
@@ -12,21 +14,27 @@ namespace Microsoft.PowerApps.TestFramework.Tests
         public TestContext TestContext { get; set; }
         private static TestContext _testContext;
         private static BrowserType Type;
+        private static string DriversPath;
+        private static bool? UsePrivateMode;
 
-        [ClassInitialize]
+       [ClassInitialize]
         public static void Initialize(TestContext TestContext)
         {
             _testContext = TestContext;
             Type = (BrowserType)Enum.Parse(typeof(BrowserType), _testContext.Properties["BrowserType"].ToString());
+            DriversPath = _testContext.Properties["DriversPath"].ToString();
+            UsePrivateMode = Convert.ToBoolean(_testContext.Properties["DriversPath"].ToString());
         }
 
         public static BrowserOptions Options = new BrowserOptions
         {
-            BrowserType = BrowserType.Chrome,
-            PrivateMode = true,
+            BrowserType = Type,
+            PrivateMode = UsePrivateMode ?? true,
             FireEvents = false,
             Headless = false,
-            UserAgent = false
+            UserAgent = false,
+            DriversPath = Path.IsPathRooted(DriversPath) ? DriversPath : Path.Combine(Directory.GetCurrentDirectory(), DriversPath)
+
         };
     }
 }

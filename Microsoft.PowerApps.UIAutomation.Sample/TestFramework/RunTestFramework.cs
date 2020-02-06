@@ -53,7 +53,7 @@ namespace Microsoft.PowerApps.TestFramework.Tests
         [TestMethod]
         public void RunTestFramework()
         {
-            BrowserOptions options = TestSettings.Options;
+            BrowserOptions options = RunTestSettings.Options;
             options.BrowserType = _browserType;
 
             using (var appBrowser = new PowerAppBrowser(options))
