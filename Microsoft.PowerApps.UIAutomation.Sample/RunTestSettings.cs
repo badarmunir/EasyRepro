@@ -23,7 +23,7 @@ namespace Microsoft.PowerApps.TestFramework.Tests
             _testContext = TestContext;
             Type = (BrowserType)Enum.Parse(typeof(BrowserType), _testContext.Properties["BrowserType"].ToString());
             DriversPath = _testContext.Properties["DriversPath"].ToString();
-            UsePrivateMode = Convert.ToBoolean(_testContext.Properties["DriversPath"].ToString());
+            UsePrivateMode = Convert.ToBoolean(_testContext.Properties["UsePrivateMode"].ToString());
         }
 
         public static BrowserOptions Options = new BrowserOptions
