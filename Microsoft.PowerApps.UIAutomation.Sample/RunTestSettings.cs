@@ -22,7 +22,7 @@ namespace Microsoft.PowerApps.TestFramework.Tests
         {
             _testContext = TestContext;
             Type = (BrowserType)Enum.Parse(typeof(BrowserType), _testContext.Properties["BrowserType"].ToString());
-            DriversPath = _testContext.Properties["DriversPath"].ToString();
+            //DriversPath = _testContext.Properties["DriversPath"].ToString();
             UsePrivateMode = Convert.ToBoolean(_testContext.Properties["UsePrivateMode"].ToString());
         }
 
@@ -33,7 +33,7 @@ namespace Microsoft.PowerApps.TestFramework.Tests
             FireEvents = false,
             Headless = false,
             UserAgent = false,
-            DriversPath = Path.IsPathRooted(DriversPath) ? DriversPath : Path.Combine(Directory.GetCurrentDirectory(), DriversPath)
+            //DriversPath = Path.IsPathRooted(DriversPath) ? DriversPath : Path.Combine(Directory.GetCurrentDirectory(), DriversPath)
 
         };
     }
