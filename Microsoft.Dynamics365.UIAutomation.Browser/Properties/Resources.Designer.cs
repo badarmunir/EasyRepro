@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser.Properties {
+namespace Microsoft.PowerApps.TestFramework.Browser.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Microsoft.Dynamics365.UIAutomation.Browser.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.Dynamics365.UIAutomation.Browser.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Microsoft.PowerApps.TestFramework.Browser.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

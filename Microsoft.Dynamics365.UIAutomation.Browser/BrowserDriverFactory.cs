@@ -9,7 +9,7 @@ using OpenQA.Selenium.Support.Events;
 using OpenQA.Selenium.Edge;
 using System;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public static class BrowserDriverFactory
     {

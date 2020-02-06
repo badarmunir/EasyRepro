@@ -4,7 +4,7 @@
 using System.Net;
 using System.Security;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public class BrowserCredentials
     {

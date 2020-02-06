@@ -2,11 +2,11 @@
 // Licensed under the MIT license.
 
 using System;
-using Microsoft.Dynamics365.UIAutomation.Browser;
+using Microsoft.PowerApps.TestFramework.Browser;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 
-namespace Microsoft.PowerApps.UIAutomation.Api
+namespace Microsoft.PowerApps.TestFramework.Api
 {
 
     /// <summary>

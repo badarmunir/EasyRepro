@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public interface IBrowserActionLogger
     {

@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-using Microsoft.Dynamics365.UIAutomation.Browser;
+using Microsoft.PowerApps.TestFramework.Browser;
 using OpenQA.Selenium;
 using System;
 
-namespace Microsoft.PowerApps.UIAutomation.Api
+namespace Microsoft.PowerApps.TestFramework.Api
 {
     /// <summary>
     /// Provides API methods to simulate user interaction with the Dynamics 365 application. 
     /// </summary>
-    /// <seealso cref="Microsoft.Dynamics365.UIAutomation.Browser.InteractiveBrowser" />
+    /// <seealso cref="Microsoft.PowerApps.TestFramework.Browser.InteractiveBrowser" />
     public class PowerAppBrowser : InteractiveBrowser
     {
         #region Constructor(s)

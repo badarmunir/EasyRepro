@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public class BrowserCommandOptions : ICloneable
     {

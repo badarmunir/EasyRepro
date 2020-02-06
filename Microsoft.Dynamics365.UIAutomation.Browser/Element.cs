@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public class Element
     {

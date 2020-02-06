@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public class BrowserCommandResult<TReturn>: ICommandResult
     {

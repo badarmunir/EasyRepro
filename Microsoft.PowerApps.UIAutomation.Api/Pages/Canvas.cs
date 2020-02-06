@@ -1,14 +1,14 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT license.
 
-using Microsoft.Dynamics365.UIAutomation.Browser;
+using Microsoft.PowerApps.TestFramework.Browser;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Microsoft.PowerApps.UIAutomation.Api
+namespace Microsoft.PowerApps.TestFramework.Api
 {
 
     /// <summary>

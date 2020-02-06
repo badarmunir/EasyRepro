@@ -4,7 +4,7 @@
 using OpenQA.Selenium;
 using System;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public class DelegateBrowserCommand<TReturn>
         : BrowserCommand<TReturn>

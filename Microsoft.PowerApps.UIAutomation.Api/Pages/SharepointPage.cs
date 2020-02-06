@@ -1,4 +1,4 @@
-﻿using Microsoft.Dynamics365.UIAutomation.Browser;
+﻿using Microsoft.PowerApps.TestFramework.Browser;
 using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.PowerApps.UIAutomation.Api
+namespace Microsoft.PowerApps.TestFramework.Api
 {
     public class Sharepoint : AppPage
     {

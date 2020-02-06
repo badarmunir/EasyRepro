@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 using System;
 using System.Security;
 
-namespace Microsoft.PowerApps.UIAutomation.Api
+namespace Microsoft.PowerApps.TestFramework.Api
 {
     public class LoginRedirectEventArgs : EventArgs
     {

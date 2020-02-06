@@ -1,11 +1,11 @@
-﻿using Microsoft.Dynamics365.UIAutomation.Browser;
-using Microsoft.PowerApps.UIAutomation.Api;
+﻿using Microsoft.PowerApps.TestFramework.Browser;
+using Microsoft.PowerApps.TestFramework.Api;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Configuration;
 using System.Security;
 
-namespace Microsoft.PowerApps.UIAutomation.Sample.TestFramework
+namespace Microsoft.PowerApps.TestFramework.Tests.TestFramework
 {
     [TestClass]
     public class RunTestFrameworkWithAppConfig

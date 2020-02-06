@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using ThreadState = System.Threading.ThreadState;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public class InteractiveBrowser
         : IDisposable

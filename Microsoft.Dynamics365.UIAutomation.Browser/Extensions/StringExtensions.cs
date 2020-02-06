@@ -5,7 +5,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public static class StringExtensions
     {

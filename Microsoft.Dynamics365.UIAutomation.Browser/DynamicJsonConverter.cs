@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Web.Script.Serialization;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public sealed class DynamicJsonConverter : JavaScriptConverter
     {

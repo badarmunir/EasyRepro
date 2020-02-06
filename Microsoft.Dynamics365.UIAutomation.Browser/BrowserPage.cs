@@ -5,7 +5,7 @@ using OpenQA.Selenium;
 using System;
 using System.Diagnostics;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public class BrowserPage
     {

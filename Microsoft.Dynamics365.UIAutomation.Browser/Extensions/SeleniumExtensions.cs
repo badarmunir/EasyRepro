@@ -16,7 +16,7 @@ using System.Threading;
 using System.Web.Script.Serialization;
 using SeleniumExtras.WaitHelpers;
 
-namespace Microsoft.Dynamics365.UIAutomation.Browser
+namespace Microsoft.PowerApps.TestFramework.Browser
 {
     public static class SeleniumExtensions
     {
