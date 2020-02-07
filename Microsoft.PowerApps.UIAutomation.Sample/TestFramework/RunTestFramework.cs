@@ -160,7 +160,7 @@ namespace Microsoft.PowerApps.TestFramework.Tests
                         throw;
                     }
 
-                    Console.WriteLine($"Power Apps Test Framework Execution Completed for Test Run #{testRunCounter} of {testUrlCount}.");
+                    Console.WriteLine($"Power Apps Test Framework Execution Completed for Test Run #{testRunCounter} of {testUrlCount}." + "\n");
                 }
 
                 
